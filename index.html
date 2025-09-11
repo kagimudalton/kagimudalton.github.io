@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dalton's Entertainment Hub</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <meta name="description" content="Dalton's Hub: Football highlights, trending movies, hot songs, TikTok dance challenges — all in one place.">
-  <meta name="author" content="Dalton">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dalton's Entertainment Hub</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="description" content="Dalton's Hub: Football highlights, trending movies, hot songs, TikTok dance challenges — all in one place.">
+<meta name="author" content="Dalton">
 
 <style>
 :root {
@@ -195,17 +195,46 @@ footer {
 // 🔑 PASTE YOUR API KEYS BELOW
 const YOUTUBE_API_KEY = "AIzaSyBrUf2K_V0drBemokYG3P_GjTmif2sTvXE";
 const TMDB_API_KEY    = "0925824d96cbb3bd3a4ca2110146ab9d";
-// --------------------------------
 
+// Function to render video cards with lazy loading
 function renderCards(containerId, videos){
-  const c=document.getElementById(containerId); c.innerHTML="";
-  videos.forEach((vid,i)=>{
-    const srcAttr=i===0?"src":"data-src";
-    c.innerHTML+=`<div class="card"><h3>${vid.title}</h3>
-      <iframe ${srcAttr}="${vid.url}" allowfullscreen loading="lazy"></iframe></div>`;
+  const c = document.getElementById(containerId);
+  c.innerHTML = "";
+  videos.forEach(vid => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const title = document.createElement("h3");
+    title.textContent = vid.title;
+
+    const iframe = document.createElement("iframe");
+    iframe.setAttribute("data-src", vid.url);
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("loading", "lazy");
+    iframe.style.width = "100%";
+    iframe.style.aspectRatio = "16/9";
+    iframe.style.border = "0";
+
+    card.appendChild(title);
+    card.appendChild(iframe);
+    c.appendChild(card);
   });
+
+  // Lazy load when card comes into view
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const ifr = entry.target.querySelector("iframe");
+        ifr.src = ifr.dataset.src;
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: "0px 0px 200px 0px" });
+
+  document.querySelectorAll(`#${containerId} .card`).forEach(card => observer.observe(card));
 }
 
+// Share function
 function shareSite() {
   const siteUrl = window.location.href;
   if (navigator.share) {
@@ -219,50 +248,55 @@ function shareSite() {
   }
 }
 
-// ⚽ Football
+// Load Football videos
 async function loadFootball(){
   if(YOUTUBE_API_KEY.includes("YOUR_")) return;
-  const res=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=football%20highlights&type=video&maxResults=6&key=${YOUTUBE_API_KEY}`);
-  const d=await res.json();
-  const vids=(d.items||[]).map(v=>({title:v.snippet.title,url:`https://www.youtube.com/embed/${v.id.videoId}`}));
-  renderCards("football-cards",vids);
+  const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=football%20highlights&type=video&maxResults=6&key=${YOUTUBE_API_KEY}`);
+  const d = await res.json();
+  const vids = (d.items || []).map(v => ({title:v.snippet.title, url:`https://www.youtube.com/embed/${v.id.videoId}`}));
+  renderCards("football-cards", vids);
 }
 
-// 🎬 Movies
+// Load Movie Trailers
 async function loadMovies(){
   if(TMDB_API_KEY.includes("YOUR_") || YOUTUBE_API_KEY.includes("YOUR_")) return;
-  const res=await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${TMDB_API_KEY}&language=en-US&page=1`);
-  const d=await res.json();
+  const res = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${TMDB_API_KEY}&language=en-US&page=1`);
+  const d = await res.json();
   let vids=[];
-  for(let m of (d.results||[]).slice(0,6)){
-    const yt=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(m.title+" trailer")}&type=video&maxResults=1&key=${YOUTUBE_API_KEY}`);
-    const yd=await yt.json();
+  for(let m of (d.results || []).slice(0,6)){
+    const yt = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(m.title+" trailer")}&type=video&maxResults=1&key=${YOUTUBE_API_KEY}`);
+    const yd = await yt.json();
     if(yd.items && yd.items[0]){
-      vids.push({title:m.title,url:`https://www.youtube.com/embed/${yd.items[0].id.videoId}`});
+      vids.push({title:m.title, url:`https://www.youtube.com/embed/${yd.items[0].id.videoId}`});
     }
   }
-  renderCards("movies-cards",vids);
+  renderCards("movies-cards", vids);
 }
 
-// 🎶 Songs
+// Load Trending Songs
 async function loadSongs(){
   if(YOUTUBE_API_KEY.includes("YOUR_")) return;
-  const res=await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&videoCategoryId=10&regionCode=US&maxResults=6&key=${YOUTUBE_API_KEY}`);
-  const d=await res.json();
-  const vids=(d.items||[]).map(v=>({title:v.snippet.title,url:`https://www.youtube.com/embed/${v.id}`}));
-  renderCards("songs-cards",vids);
+  const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&videoCategoryId=10&regionCode=US&maxResults=6&key=${YOUTUBE_API_KEY}`);
+  const d = await res.json();
+  const vids = (d.items || []).map(v => ({title:v.snippet.title, url:`https://www.youtube.com/embed/${v.id}`}));
+  renderCards("songs-cards", vids);
 }
 
-// 💃 TikTok via YouTube API
+// Load TikTok videos via YouTube API
 async function loadTikTok(){
   if(YOUTUBE_API_KEY.includes("YOUR_")) return;
-  const res=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=tiktok%20dance%20challenge%20trending&type=video&maxResults=6&key=${YOUTUBE_API_KEY}`);
-  const d=await res.json();
-  const vids=(d.items||[]).map(v=>({title:v.snippet.title,url:`https://www.youtube.com/embed/${v.id.videoId}`}));
-  renderCards("tiktok-cards",vids);
+  const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=tiktok%20dance%20challenge%20trending&type=video&maxResults=6&key=${YOUTUBE_API_KEY}`);
+  const d = await res.json();
+  const vids = (d.items || []).map(v => ({title:v.snippet.title, url:`https://www.youtube.com/embed/${v.id.videoId}`}));
+  renderCards("tiktok-cards", vids);
 }
 
-document.addEventListener("DOMContentLoaded",()=>{loadFootball();loadMovies();loadSongs();loadTikTok();});
+document.addEventListener("DOMContentLoaded", () => {
+  loadFootball();
+  loadMovies();
+  loadSongs();
+  loadTikTok();
+});
 </script>
 </body>
 </html>
