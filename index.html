@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dalton's Entertainment Hub</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="description" content="Dalton's Hub: Football highlights, trending movies, hot songs, TikTok dance challenges — all in one place.">
+<meta name="author" content="Dalton">
+
+<style>
+:root {--primary-color:#ff6600;--secondary-color:#222;--bg:#111;--card:#1e1e1e;--text:#eee;}
+body {margin:0;font-family:system-ui;background:var(--bg);color:var(--text);}
+.cards {display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+header {background:var(--secondary-color);color:#fff;position:sticky;top:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+nav ul {margin:0;padding:10px;display:flex;gap:18px;list-style:none;overflow-x:auto;white-space:nowrap;}
+nav a {color:#fff;text-decoration:none;font-weight:700;}
+.ticker {background:#000;color:#fff;overflow:hidden;white-space:nowrap;}
+.ticker .track {display:inline-block;padding:8px 0;animation:scroll-left 20s linear infinite;}
+@keyframes scroll-left {0% {transform:translateX(0)}100% {transform:translateX(-50%)}}
+.hero {background:linear-gradient(135deg,#ff6600,#ff9b4a);color:#fff;text-align:center;padding:50px 20px;}
+.hero h1 {margin:0 0 10px;font-size:clamp(1.8rem,5vw,2.6rem);}
+.hero p {margin:0 0 18px;font-size:clamp(1rem,2.5vw,1.2rem);}
+.cta-buttons {display:flex;flex-wrap:wrap;justify-content:center;gap:12px;}
+.cta-buttons a {padding:12px 20px;border-radius:28px;font-weight:700;text-decoration:none;color:#fff;}
+.cta-buttons .tiktok {background:linear-gradient(45deg,#000,#ff0050,#00f2ea);}
+.cta-buttons .whatsapp {background:#25D366;}
+.cta-buttons .share {background:#444;}
+.cta-buttons .share:hover {background:#666;}
+.section {max-width:1200px;margin:40px auto;padding:0 16px;}
+.section h2 {text-align:center;color:var(--primary-color);}
+.card {background:var(--card);border-radius:16px;box-shadow:0 6px 14px rgba(0,0,0,.2);overflow:hidden;transition:all .3s ease;}
+.card:hover {transform:translateY(-6px);box-shadow:0 0 15px rgba(255,102,0,.8),0 0 25px rgba(255,102,0,.6);}
+.card h3 {padding:10px 12px;margin:0;font-size:1rem;}
+.card iframe {width:100%;aspect-ratio:16/9;border:0;}
+#developer .profile img {width:140px;border-radius:50%;box-shadow:0 0 15px rgba(255,102,0,.8);}
+footer {text-align:center;padding:18px;background:var(--secondary-color);color:#fff;margin-top:40px;}
+.spinner {border: 4px solid rgba(255,255,255,0.2);border-top: 4px solid var(--primary-color);border-radius: 50%;width:36px;height:36px;animation: spin 1s linear infinite;margin:20px auto;}
+@keyframes spin {0% {transform:rotate(0deg);}100% {transform:rotate(360deg);}}
+</style>
+</head>
+<body class="dark">
+
+<header>
+  <nav>
+    <ul>
+      <li><a href="#football">Football</a></li>
+      <li><a href="#movies">Movies</a></li>
+      <li><a href="#songs">Songs</a></li>
+      <li><a href="#tiktok">TikTok</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="ticker"><div class="track">⚽ Football • 🎬 Movies • 🎶 Songs • 💃 TikTok Challenges • Built by Dalton •</div></div>
+
+<section class="hero">
+  <h1>Welcome to Dalton's Hub</h1>
+  <p>Your daily dose of football, movies, songs, and TikTok!</p>
+  <div class="cta-buttons">
+    <a href="https://www.tiktok.com/@f5y062" target="_blank" class="tiktok">Follow me on TikTok</a>
+    <a href="https://whatsapp.com/channel/0029VbAx4Im002TA87SkR446" target="_blank" class="whatsapp">Join my WhatsApp Channel</a>
+    <a href="#" onclick="shareSite()" class="share">🔗 Share This Site</a>
+  </div>
+</section>
+
+<section class="section" id="football"><h2>Football Highlights</h2><div class="cards" id="football-cards"><div class="spinner"></div></div></section>
+<section class="section" id="movies"><h2>Movie Trailers</h2><div class="cards" id="movies-cards"><div class="spinner"></div></div></section>
+<section class="section" id="songs"><h2>Trending Songs</h2><div class="cards" id="songs-cards"><div class="spinner"></div></div></section>
+<section class="section" id="tiktok"><h2>💃 TikTok Dance Challenges</h2><div class="cards" id="tiktok-cards"><div class="spinner"></div></div></section>
+
+<section class="section" id="developer">
+  <h2>👨‍💻 Developer</h2>
+  <div class="profile">
+    <img src="https://i.ibb.co/LyYwtVM/IMG-20241225-094241-830-091120-2.jpg" alt="Dalton - Developer">
+  </div>
+  <h3>Dalton - Developer</h3>
+  <p>Hello 👋 I’m Dalton. I built this hub to share football, movies, and music in one place.</p>
+  <p>📧 <a href="mailto:kagimudalton@gmail.com">kagimudalton@gmail.com</a></p>
+</section>
+
+<footer><p>&copy; 2025 Dalton's Entertainment Hub | <a href="#developer">Developer</a></p></footer>
+
+<script>
+// 🔑 Replace with your actual API keys
+const YOUTUBE_API_KEY = "AIzaSyDmHb1DcpVsRetq35HUGgUd3WPvHuOxA0U";
+const TMDB_API_KEY    = "0925824d96cbb3bd3a4ca2110146ab9d";
+
+// Render videos into cards
+function renderCards(containerId, videos){
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  videos.forEach(v => {
+    const card = document.createElement("div"); card.className = "card";
+    const h3 = document.createElement("h3"); h3.textContent = v.title;
+    const iframe = document.createElement("iframe");
+    iframe.src = v.url; iframe.allowFullscreen = true; iframe.loading = "lazy";
+    card.appendChild(h3); card.appendChild(iframe); container.appendChild(card);
+  });
+}
+
+// Share site
+function shareSite(){
+  const siteUrl = window.location.href;
+  if(navigator.share){
+    navigator.share({title:"Dalton's Entertainment Hub",text:"Check out Dalton’s Hub for football, movies, songs, and TikTok trends!",url:siteUrl}).catch(console.error);
+  } else { alert("Copy this link: "+siteUrl); }
+}
+
+// Fetch YouTube videos
+async function loadYouTube(query, max=6){
+  const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=${max}&key=${YOUTUBE_API_KEY}`);
+  const data = await res.json();
+  return (data.items||[]).map(v=>({title:v.snippet.title,url:`https://www.youtube.com/embed/${v.id.videoId}`}));
+}
+
+// Load all sections
+async function loadSections(){
+  try{
+    renderCards("football-cards", await loadYouTube("football highlights"));
+    renderCards("songs-cards", await loadYouTube("trending songs"));
+    renderCards("tiktok-cards", await loadYouTube("tiktok dance challenge trending"));
+
+    // Movies from TMDB + YouTube
+    const res = await fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${TMDB_API_KEY}&language=en-US&page=1`);
+    const data = await res.json();
+    const vids = [];
+    for(let m of (data.results||[]).slice(0,6)){
+      const yt = await loadYouTube(m.title + " trailer", 1);
+      if(yt[0]) vids.push(yt[0]);
+    }
+    renderCards("movies-cards", vids);
+
+  }catch(e){console.error(e);}
+}
+
+document.addEventListener("DOMContentLoaded", loadSections);
+</script>
+</body>
+</html>
