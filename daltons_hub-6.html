@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dalton's Entertainment Hub</title>
+  <meta name="description" content="Dalton's Hub — Football, Movies, TV Shows, Songs, Reels, TikTok & Live Chat." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --orange:#ff6600; --og:rgba(255,102,0,.45); --od:rgba(255,102,0,.12);
+      --bg:#0e0d13; --surface:#17161e; --card:#1e1d27; --card2:#252433;
+      --border:rgba(255,255,255,.07); --text:#f0eeff; --muted:#7e7a9a;
+      --header-h:58px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{scroll-behavior:smooth;margin:0;padding:0;overflow-y:auto;overflow-x:hidden;min-height:100%;-webkit-overflow-scrolling:touch}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100%}
+    a{color:inherit;text-decoration:none}
+
+    /* HEADER */
+    header{position:-webkit-sticky;position:sticky;top:0;z-index:900;height:var(--header-h);background:rgba(14,13,19,.94);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:0 18px}
+    .logo{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:.06em;color:#fff;white-space:nowrap;flex-shrink:0}
+    .logo em{font-style:normal;color:var(--orange)}
+    .search-wrap{position:relative;flex:1;max-width:260px}
+    .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:7px 34px 7px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.79rem;outline:none;transition:border-color .2s}
+    .search-wrap input:focus{border-color:rgba(255,102,0,.5)}
+    .search-wrap input::placeholder{color:var(--muted)}
+    .s-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+    #search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;z-index:2000;box-shadow:0 8px 28px rgba(0,0,0,.7);display:none}
+    .sr-item{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;transition:background .15s;font-size:.81rem}
+    .sr-item:hover{background:var(--surface)}
+    nav{margin-left:auto}
+    nav ul{list-style:none;display:flex;gap:2px}
+    nav a{display:block;padding:5px 10px;border-radius:20px;color:var(--muted);font-size:.78rem;font-weight:700;transition:color .2s,background .2s;white-space:nowrap}
+    nav a:hover,nav a.active{color:#fff;background:var(--od)}
+
+    /* TICKER */
+    .ticker{background:var(--orange);overflow:hidden;height:30px;display:flex;align-items:center}
+    .ticker-label{background:#000;color:var(--orange);font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:.12em;padding:0 12px;height:100%;display:flex;align-items:center;flex-shrink:0}
+    .ticker-track{display:inline-block;white-space:nowrap;animation:marquee 30s linear infinite;font-size:.75rem;font-weight:700;color:#fff;letter-spacing:.04em;padding:0 10px}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* HERO */
+    .hero{position:relative;padding:48px 20px 36px;text-align:center;overflow:visible;min-height:auto}
+    .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 0%,rgba(255,102,0,.17) 0%,transparent 70%);pointer-events:none;z-index:0}
+    .hero-inner{position:relative;z-index:1;max-width:680px;margin:0 auto;padding-bottom:32px}
+    .eyebrow{display:inline-block;background:var(--od);border:1px solid rgba(255,102,0,.3);color:var(--orange);font-size:.67rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:4px 13px;border-radius:20px;margin-bottom:14px}
+    .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.8rem,8vw,5rem);line-height:1;letter-spacing:.02em;margin-bottom:11px}
+    .hero h1 em{font-style:normal;color:var(--orange)}
+    .hero p{color:var(--muted);font-size:clamp(.86rem,2vw,.98rem);margin-bottom:24px;line-height:1.7}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:28px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;border:none;transition:transform .18s,opacity .18s;white-space:nowrap;text-decoration:none;color:#fff;-webkit-font-smoothing:antialiased}
+    .btn:hover{opacity:.88}
+    .btn-tk{background:linear-gradient(135deg,#010101 0%,#ff0050 60%,#00f2ea 100%);color:#fff !important}
+    .btn-wa{background:#25D366;color:#fff !important}
+    .btn-chat{background:var(--orange);color:#fff !important}
+    .btn-nf{background:#E50914;color:#fff !important}
+    .btn-tb{background:#FA4D1E;color:#fff !important}
+    .btn-px{background:#E5A00D;color:#000 !important}
+    .btn-pr{background:#00A8E0;color:#fff !important}
+    .btn-sh{background:var(--surface);color:var(--text) !important;border:1px solid var(--border)}
+    .cta-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:28px;padding:0 12px;width:100%}
+
+    /* PLATFORM STRIP */
+    .platform-strip{display:flex;align-items:stretch;overflow-x:auto;border-bottom:1px solid var(--border)}
+    .platform-strip::-webkit-scrollbar{display:none}
+    .p-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:14px 20px;flex:0 0 auto;cursor:pointer;border-right:1px solid var(--border);transition:background .2s;text-decoration:none;min-width:90px}
+    .p-pill:hover{background:var(--surface)}
+    .p-pill:last-child{border-right:none}
+    .p-pill-active{background:var(--od) !important}
+    .p-pill-active .p-pill-label{color:var(--orange) !important}
+    .p-pill-active .p-pill-icon{filter:drop-shadow(0 0 4px rgba(255,102,0,.7))}
+    .p-pill-icon{font-size:1.3rem;line-height:1}
+    .p-pill-label{font-size:.68rem;font-weight:700;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+
+    /* ROW SECTION (PearlTunes-style) */
+    .row-section{padding:0 0 36px;position:relative;overflow:visible}
+    .row-head{display:flex;align-items:baseline;justify-content:space-between;padding:0 20px;margin-bottom:13px}
+    .row-head h2{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.06em;color:#fff;display:flex;align-items:center;gap:7px}
+    .row-more{font-size:.73rem;font-weight:700;color:var(--orange);letter-spacing:.04em;white-space:nowrap}
+    .row-more:hover{text-decoration:underline}
+
+    /* HORIZONTAL SCROLL */
+    .h-scroll{display:flex;gap:13px;overflow-x:auto;padding:0 20px 12px}
+    .h-scroll::-webkit-scrollbar{height:3px}
+    .h-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+    /* VIDEO CARD */
+    .v-card{flex:0 0 260px;background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden;transition:border-color .22s,box-shadow .22s}
+    .v-card:hover{border-color:rgba(255,102,0,.4);box-shadow:0 0 18px var(--og)}
+    .v-card iframe{width:100%;aspect-ratio:16/9;border:0;display:block}
+    .vc-title{padding:9px 11px;font-size:.77rem;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+    /* REEL CARD */
+    .r-card{flex:0 0 145px;background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden;transition:border-color .22s,box-shadow .22s}
+    .r-card:hover{border-color:rgba(255,102,0,.4);box-shadow:0 0 16px var(--og)}
+    .r-card iframe{width:100%;aspect-ratio:9/16;border:0;display:block}
+
+    /* TMDB CARD */
+    .n-card{flex:0 0 145px;background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden;transition:border-color .22s,box-shadow .22s;display:flex;flex-direction:column}
+    .n-card:hover{border-color:rgba(229,9,20,.4);box-shadow:0 0 16px rgba(229,9,20,.28)}
+    .n-poster{width:100%;height:180px;object-fit:cover;background:#111;display:block}
+    .n-poster-ph{width:100%;height:180px;background:linear-gradient(135deg,#1a1929,#252433);display:flex;align-items:center;justify-content:center;font-size:2rem}
+    .n-info{padding:9px;flex:1;display:flex;flex-direction:column;gap:5px}
+    .n-title{font-size:.76rem;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .n-meta{font-size:.67rem;color:var(--muted);display:flex;gap:5px;align-items:center}
+    .n-rating{color:#f5c518;font-weight:700}
+    .n-actions{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px}
+    .sb{display:inline-flex;align-items:center;padding:3px 8px;border-radius:12px;font-size:.65rem;font-weight:700;border:none;cursor:pointer;transition:opacity .2s;white-space:nowrap;text-decoration:none}
+    .sb:hover{opacity:.82}
+    .sb.nf{background:#E50914;color:#fff}
+    .sb.tb{background:#FA4D1E;color:#fff}
+    .sb.px{background:#E5A00D;color:#000}
+    .sb.tr{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+
+    /* SONG LIST */
+    .song-list{display:flex;flex-direction:column;margin:0 20px;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+    .song-item{display:flex;align-items:center;gap:11px;padding:10px 13px;background:var(--card);border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer}
+    .song-item:last-child{border-bottom:none}
+    .song-item:hover{background:var(--card2)}
+    .song-num{font-family:'Bebas Neue',sans-serif;font-size:.95rem;color:var(--muted);width:18px;text-align:center;flex-shrink:0}
+    .song-thumb{width:42px;height:42px;border-radius:7px;object-fit:cover;flex-shrink:0}
+    .song-thumb-ph{width:42px;height:42px;border-radius:7px;background:var(--od);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+    .song-info{flex:1;min-width:0}
+    .song-title{font-size:.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .song-play{width:30px;height:30px;border-radius:50%;background:var(--orange);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .2s,transform .15s}
+    .song-play:hover{opacity:.82}
+    .song-video-wrap{overflow:hidden;max-height:0;transition:max-height .35s ease}
+    .song-video-wrap.open{max-height:220px}
+    .song-video-wrap iframe{width:100%;aspect-ratio:16/9;border:0;display:block}
+
+    /* MOVIE TABS */
+    .mtabs{display:flex;gap:7px;padding:0 20px;margin-bottom:13px;flex-wrap:wrap}
+    .mtab{padding:6px 15px;border-radius:18px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:700;font-size:.76rem;cursor:pointer;transition:all .2s}
+    .mtab.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+    .mtab:hover:not(.active){color:#fff;background:#222}
+
+    /* DIVIDER */
+    .section-divider{height:1px;background:var(--border);margin:0 20px 36px}
+
+    /* CHATROOM */
+    .chat-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:34px 20px 46px;overflow:visible}
+    .chat-outer{max-width:660px;margin:0 auto}
+    .chat-wrap{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;height:450px}
+    .chat-name-bar{border-bottom:1px solid var(--border);padding:8px 13px;display:flex;gap:9px;align-items:center;background:rgba(0,0,0,.22)}
+    .chat-name-bar label{font-size:.72rem;color:var(--muted);white-space:nowrap}
+    .chat-name-bar input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 9px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.79rem;outline:none}
+    .chat-name-bar input:focus{border-color:rgba(255,102,0,.5)}
+    .chat-online{font-size:.67rem;color:#4caf50;font-weight:700;display:flex;align-items:center;gap:4px;white-space:nowrap;margin-left:auto}
+    .chat-online::before{content:'';width:6px;height:6px;border-radius:50%;background:#4caf50;display:inline-block;animation:pulse 2s ease infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+    .chat-messages{flex:1;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:8px}
+    .chat-messages::-webkit-scrollbar{width:3px}
+    .chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+    .msg{display:flex;flex-direction:column;max-width:78%}
+    .msg.mine{align-self:flex-end;align-items:flex-end}
+    .msg.theirs{align-self:flex-start;align-items:flex-start}
+    .msg-meta{font-size:.63rem;color:var(--muted);margin-bottom:2px}
+    .msg-bubble{padding:8px 11px;border-radius:13px;font-size:.83rem;line-height:1.5;word-break:break-word}
+    .msg.mine .msg-bubble{background:var(--orange);color:#fff;border-bottom-right-radius:3px}
+    .msg.theirs .msg-bubble{background:#252433;color:var(--text);border-bottom-left-radius:3px}
+    .chat-system{text-align:center;font-size:.67rem;color:var(--muted);padding:2px 0}
+    .chat-footer{border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;align-items:flex-end;background:var(--card)}
+    #chat-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:7px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;resize:none;max-height:80px;overflow-y:auto;line-height:1.4}
+    #chat-input:focus{border-color:rgba(255,102,0,.5)}
+    #chat-send{background:var(--orange);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .15s}
+    #chat-send:hover{opacity:.84}
+
+    /* DEVELOPER */
+    .dev-section{max-width:620px;margin:0 auto;padding:34px 20px 46px}
+    .dev-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:28px 24px;display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+    .dev-avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--orange);box-shadow:0 0 20px var(--og);flex-shrink:0}
+    .dev-initials{width:96px;height:96px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:#fff;flex-shrink:0;border:3px solid var(--orange);box-shadow:0 0 20px var(--og)}
+    .dev-info h3{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.04em;margin-bottom:6px}
+    .dev-info p{color:var(--muted);font-size:.86rem;line-height:1.65;margin-bottom:10px}
+    .dev-link{display:inline-flex;align-items:center;gap:6px;color:var(--orange);font-size:.82rem;font-weight:700;transition:opacity .2s}
+    .dev-link:hover{opacity:.74}
+
+    /* FOOTER */
+    footer{background:var(--surface);border-top:1px solid var(--border);padding:0}
+    .footer-top{padding:40px 20px 28px;max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+    .footer-brand{}
+    .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.06em;margin-bottom:8px}
+    .footer-logo em{font-style:normal;color:var(--orange)}
+    .footer-tagline{color:var(--muted);font-size:.78rem;line-height:1.65;margin-bottom:16px}
+    .footer-social-row{display:flex;gap:8px;flex-wrap:wrap}
+    .fsoc{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);font-size:1rem;transition:all .2s;text-decoration:none}
+    .fsoc:hover{background:var(--orange);border-color:var(--orange)}
+    .footer-links-col h4{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+    .footer-links-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+    .footer-links-col ul li a{font-size:.8rem;color:var(--muted);transition:color .2s}
+    .footer-links-col ul li a:hover{color:var(--orange)}
+    .footer-bottom{border-top:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+    .footer-copy{font-size:.7rem;color:var(--muted)}
+    .footer-copy a{color:var(--orange)}
+    .footer-made{font-size:.7rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+    @media(max-width:560px){.footer-top{grid-template-columns:1fr}}
+
+    /* SPINNER */
+    .spin-wrap{display:flex;flex-direction:column;align-items:center;gap:9px;padding:30px 16px;color:var(--muted);font-size:.78rem;flex-shrink:0}
+    .spinner{width:28px;height:28px;border:3px solid rgba(255,102,0,.15);border-top-color:var(--orange);border-radius:50%;animation:spin .85s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* THUMBNAIL PLAYER (click-to-load) */
+    .thumb-wrap{position:relative;width:100%;cursor:pointer;background:#000;display:block}
+    .v-card .thumb-wrap{aspect-ratio:16/9}
+    .r-card .thumb-wrap{aspect-ratio:9/16}
+    .thumb-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
+    .thumb-wrap:hover img{opacity:.78}
+    .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:48px;height:48px;background:rgba(255,102,0,.92);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s,background .2s;pointer-events:none}
+    .thumb-wrap:hover .play-btn{transform:translate(-50%,-50%) scale(1.12);background:var(--orange)}
+    .play-btn svg{margin-left:3px}
+    .thumb-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+
+    /* FADE IN - disabled, sections always visible */
+    .fade-in{opacity:1;transform:none}
+
+    /* PHOTO MODAL */
+    .photo-modal{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;visibility:hidden}
+    .photo-modal.open{opacity:1;pointer-events:all;visibility:visible}
+    .photo-modal img{max-width:90vw;max-height:88vh;border-radius:16px;border:3px solid var(--orange);box-shadow:0 0 40px var(--og);transform:scale(.9);transition:transform .28s}
+    .photo-modal.open img{transform:scale(1)}
+    .photo-modal-close{position:absolute;top:18px;right:18px;background:var(--surface);border:1px solid var(--border);border-radius:50%;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);font-size:1.1rem;transition:background .2s}
+    .photo-modal-close:hover{background:var(--orange)}
+    .dev-avatar{cursor:pointer;transition:box-shadow .2s}
+    .dev-avatar:hover{box-shadow:0 0 28px var(--og)}
+
+    @media(max-width:600px){
+      nav a{padding:4px 7px;font-size:.72rem}
+      .v-card{flex:0 0 230px}
+      .n-card{flex:0 0 128px}
+      .r-card{flex:0 0 118px}
+      .hero{padding:40px 16px 0}
+      .dev-card{padding:18px 14px;gap:16px}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">Dalton's <em>Hub</em></a>
+  <div class="search-wrap">
+    <input type="text" id="site-search" placeholder="Search sections…" autocomplete="off" />
+    <svg class="s-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <div id="search-results"></div>
+  </div>
+  <nav>
+    <ul>
+      <li><a href="#football">⚽</a></li>
+      <li><a href="#movies">🎬</a></li>
+      <li><a href="#tvshows">📺</a></li>
+      <li><a href="#songs">🎶</a></li>
+      <li><a href="#reels">📱</a></li>
+      <li><a href="#tiktok">💃</a></li>
+      <li><a href="#chat">💬</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">LIVE</div>
+  <div style="overflow:hidden;flex:1;min-width:0">
+    <div class="ticker-track">⚽ Football Highlights &nbsp;•&nbsp; 🎬 Free Movies &nbsp;•&nbsp; 📺 TV Series &nbsp;•&nbsp; 🎶 Trending Songs &nbsp;•&nbsp; 📱 Reels &amp; Shorts &nbsp;•&nbsp; 💃 TikTok Challenges &nbsp;•&nbsp; 💬 Live Chatroom &nbsp;•&nbsp; Built with ❤️ by Dalton &nbsp;•&nbsp; ⚽ Football Highlights &nbsp;•&nbsp; 🎬 Free Movies &nbsp;•&nbsp; 📺 TV Series &nbsp;•&nbsp; 🎶 Trending Songs &nbsp;•&nbsp; 📱 Reels &amp; Shorts &nbsp;•&nbsp; 💃 TikTok Challenges &nbsp;•&nbsp; 💬 Live Chatroom &nbsp;•&nbsp; Built with ❤️ by Dalton &nbsp;•&nbsp;</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">🔥 Your Daily Entertainment Fix</div>
+    <h1>Welcome to<br><em>Dalton's Hub</em></h1>
+    <p>Football · Movies · TV Shows · Songs · Reels · TikTok · Live Chat — all in one place for teens.</p>
+    <div class="cta-row">
+      <a href="https://www.tiktok.com/@f5y062" target="_blank" class="btn btn-tk">🎵 TikTok</a>
+      <a href="https://whatsapp.com/channel/0029VbAx4Im002TA87SkR446" target="_blank" class="btn btn-wa">💬 WhatsApp</a>
+      <a href="#chat" class="btn btn-chat">🗨 Live Chat</a>
+      <a href="https://www.netflix.com" target="_blank" class="btn btn-nf">▶ Netflix</a>
+      <a href="https://tubitv.com" target="_blank" class="btn btn-tb">📺 Tubi Free</a>
+      <a href="https://watch.plex.tv/movies" target="_blank" class="btn btn-px">🎞 Plex Free</a>
+      <a href="https://www.amazon.com/gp/video/storefront" target="_blank" class="btn btn-pr">🛒 Prime</a>
+      <button class="btn btn-sh" onclick="shareSite()">🔗 Share</button>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORM STRIP -->
+<div class="platform-strip">
+  <a href="#football" class="p-pill"><span class="p-pill-icon">⚽</span><span class="p-pill-label">Football</span></a>
+  <a href="#movies"   class="p-pill"><span class="p-pill-icon">🎬</span><span class="p-pill-label">Movies</span></a>
+  <a href="#tvshows"  class="p-pill"><span class="p-pill-icon">📺</span><span class="p-pill-label">TV Shows</span></a>
+  <a href="#songs"    class="p-pill"><span class="p-pill-icon">🎶</span><span class="p-pill-label">Songs</span></a>
+  <a href="#reels"    class="p-pill"><span class="p-pill-icon">📱</span><span class="p-pill-label">Reels</span></a>
+  <a href="#tiktok"   class="p-pill"><span class="p-pill-icon">💃</span><span class="p-pill-label">TikTok</span></a>
+  <a href="#chat"     class="p-pill"><span class="p-pill-icon">💬</span><span class="p-pill-label">Live Chat</span></a>
+  <a href="#developer" class="p-pill"><span class="p-pill-icon">👨‍💻</span><span class="p-pill-label">Developer</span></a>
+</div>
+
+<!-- FOOTBALL -->
+<section class="row-section" id="football">
+  <div class="row-head">
+    <h2>⚽ Football Highlights</h2>
+    <a class="row-more" href="https://www.youtube.com/results?search_query=football+highlights+2025" target="_blank">See More →</a>
+  </div>
+  <div class="h-scroll" id="football-cards"><div class="spin-wrap"><div class="spinner"></div><span>Loading…</span></div></div>
+</section>
+<div class="section-divider"></div>
+
+<!-- MOVIES -->
+<section class="row-section" id="movies">
+  <div class="row-head">
+    <h2>🎬 Free Full Movies</h2>
+    <a class="row-more" href="https://tubitv.com" target="_blank">More on Tubi →</a>
+  </div>
+  <div class="mtabs">
+    <button class="mtab active" onclick="switchMovieTab('yt',event)">▶ YouTube Free</button>
+    <button class="mtab" onclick="switchMovieTab('archive',event)">🏛 Classics</button>
+  </div>
+  <div id="movies-yt-panel">
+    <div class="h-scroll" id="movies-cards"><div class="spin-wrap"><div class="spinner"></div><span>Loading…</span></div></div>
+  </div>
+  <div id="movies-archive-panel" style="display:none">
+    <div class="h-scroll" id="archive-cards"><div class="spin-wrap"><div class="spinner"></div></div></div>
+  </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- TV SHOWS -->
+<section class="row-section" id="tvshows">
+  <div class="row-head">
+    <h2>📺 TV Shows &amp; Series</h2>
+    <a class="row-more" href="https://www.netflix.com/browse/genre/83" target="_blank">Netflix →</a>
+  </div>
+  <p style="color:var(--muted);font-size:.75rem;padding:0 20px;margin-bottom:12px">Tap any show to find it on Netflix, Tubi or Plex</p>
+  <div class="h-scroll" id="tvshows-cards"><div class="spin-wrap"><div class="spinner"></div><span>Loading…</span></div></div>
+</section>
+<div class="section-divider"></div>
+
+<!-- SONGS -->
+<section class="row-section" id="songs">
+  <div class="row-head">
+    <h2>🎶 Trending Songs</h2>
+    <a class="row-more" href="https://www.youtube.com/results?search_query=trending+songs+2025" target="_blank">See More →</a>
+  </div>
+  <div class="song-list" id="songs-cards">
+    <div class="spin-wrap" style="align-self:center"><div class="spinner"></div><span>Loading…</span></div>
+  </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- REELS -->
+<section class="row-section" id="reels">
+  <div class="row-head">
+    <h2>📱 Reels &amp; Shorts</h2>
+    <a class="row-more" href="https://www.youtube.com/shorts" target="_blank">YouTube Shorts →</a>
+  </div>
+  <div class="h-scroll" id="reels-cards"><div class="spin-wrap"><div class="spinner"></div><span>Loading…</span></div></div>
+</section>
+<div class="section-divider"></div>
+
+<!-- TIKTOK -->
+<section class="row-section" id="tiktok">
+  <div class="row-head">
+    <h2>💃 TikTok Challenges</h2>
+    <a class="row-more" href="https://www.tiktok.com/trending" target="_blank">TikTok →</a>
+  </div>
+  <div class="h-scroll" id="tiktok-cards"><div class="spin-wrap"><div class="spinner"></div><span>Loading…</span></div></div>
+</section>
+<div class="section-divider"></div>
+
+<!-- CHATROOM -->
+<div id="chatroom-bg">
+  <div class="chat-section" id="chat">
+    <div class="row-head" style="padding:0;margin-bottom:16px">
+      <h2>💬 Live Chatroom</h2>
+      <span class="chat-online" id="online-count">1 online</span>
+    </div>
+    <div class="chat-outer">
+      <div class="chat-wrap">
+        <div class="chat-name-bar">
+          <label for="chat-username">Name:</label>
+          <input type="text" id="chat-username" maxlength="24" placeholder="Your name…" value="Guest" />
+          <span class="chat-online" id="online-count2" style="font-size:.64rem"></span>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        <div class="chat-footer">
+          <textarea id="chat-input" rows="1" placeholder="Say something… (Enter to send)" maxlength="400"></textarea>
+          <button id="chat-send" aria-label="Send">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DEVELOPER -->
+<section id="developer">
+  <div class="dev-section">
+    <div class="row-head" style="padding:0;margin-bottom:16px"><h2>👨‍💻 Developer</h2></div>
+    <div class="dev-card">
+      <img class="dev-avatar" src="https://i.ibb.co/7dQRScfr/file-00000000cb30722f8b04c5a3bc060782-2.png" alt="Dalton"
+        onclick="openPhoto()"
+        title="Tap to enlarge"
+        onerror="this.outerHTML='<div class=&quot;dev-initials&quot;>D</div>'" />
+      <div class="dev-info">
+        <h3>Dalton Kagimú</h3>
+        <p>Hey 👋 I'm Dalton — a teen who built this hub to bring football, movies, TV shows, music and trending content all in one place. Enjoy the vibes!</p>
+        <a href="mailto:kagimudalton@gmail.com" class="dev-link">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          kagimudalton@gmail.com
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">Dalton's <em>Hub</em></div>
+      <p class="footer-tagline">Your daily dose of football, movies, TV shows, music, reels and TikTok trends — all in one place for teens.</p>
+      <div class="footer-social-row">
+        <a href="https://www.tiktok.com/@f5y062" target="_blank" class="fsoc" title="TikTok">🎵</a>
+        <a href="https://whatsapp.com/channel/0029VbAx4Im002TA87SkR446" target="_blank" class="fsoc" title="WhatsApp">💬</a>
+        <a href="mailto:kagimudalton@gmail.com" class="fsoc" title="Email">📧</a>
+        <a href="#chat" class="fsoc" title="Live Chat">🗨</a>
+        <a href="https://www.netflix.com" target="_blank" class="fsoc" title="Netflix">▶</a>
+      </div>
+    </div>
+    <div class="footer-links-col">
+      <h4>Browse</h4>
+      <ul>
+        <li><a href="#football">⚽ Football Highlights</a></li>
+        <li><a href="#movies">🎬 Free Movies</a></li>
+        <li><a href="#tvshows">📺 TV Shows &amp; Series</a></li>
+        <li><a href="#songs">🎶 Trending Songs</a></li>
+        <li><a href="#reels">📱 Reels &amp; Shorts</a></li>
+        <li><a href="#tiktok">💃 TikTok Challenges</a></li>
+        <li><a href="#chat">💬 Live Chatroom</a></li>
+        <li><a href="#developer">👨‍💻 Developer</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 <a href="#">Dalton's Entertainment Hub</a>. All rights reserved.</p>
+    <p class="footer-made">Made with ❤️ by <a href="#developer" style="color:var(--orange);margin-left:3px">Dalton</a></p>
+  </div>
+</footer>
+
+<!-- PHOTO MODAL -->
+<div class="photo-modal" id="photo-modal" onclick="closePhoto(event)">
+  <button class="photo-modal-close" onclick="closePhotoBtn()">✕</button>
+  <img src="https://i.ibb.co/7dQRScfr/file-00000000cb30722f8b04c5a3bc060782-2.png" alt="Dalton" />
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+try {
+  firebase.initializeApp({
+    apiKey:"AIzaSyBp9K5myoaPtBVWvp-3Kn38DtJ9PklBMrs",
+    authDomain:"entertainment-cc394.firebaseapp.com",
+    databaseURL:"https://entertainment-cc394-default-rtdb.firebaseio.com",
+    projectId:"entertainment-cc394",
+    storageBucket:"entertainment-cc394.firebasestorage.app",
+    messagingSenderId:"313597396213",
+    appId:"1:313597396213:web:3bd27df6ec1388712d31bc"
+  });
+} catch(e){}
+</script>
+
+<script>
+// Multiple YouTube API keys — rotates automatically when one hits quota
+const YT_KEYS = [
+  "AIzaSyBn9Xlb1zwFZet2UIsnJtdXWThuvIQaGLM", // Key 1 (original)
+  // Add more keys below — get them free at console.cloud.google.com
+  "AIzaSyAVcLWrI-M_XYs0a-CbVA6ZRj73KHnZZvs",  // Key 2
+  "AIzaSyB4vb39jJfxqoqqlWITw6AAi1F9nSvM5Ns",  // Key 3
+];
+let ytKeyIndex = 0;
+function getYTKey(){ return YT_KEYS[ytKeyIndex]; }
+function rotateYTKey(){
+  ytKeyIndex++;
+  if(ytKeyIndex < YT_KEYS.length){
+    console.log(`YouTube key ${ytKeyIndex} exhausted, switching to key ${ytKeyIndex+1}`);
+    return true; // rotated successfully
+  }
+  return false; // all keys exhausted
+}
+const TMDB_KEY = "0925824d96cbb3bd3a4ca2110146ab9d";
+
+/* FEEDS */
+const feeds = {
+  "football-cards": {mode:"yt", query:"football highlights 2025",      pt:null,loading:false,done:false},
+  "movies-cards":   {mode:"yt", query:"full movie free to watch 2024", pt:null,loading:false,done:false},
+  "archive-cards":  {mode:"archive", archivePage:1,                    pt:null,loading:false,done:false},
+  "tvshows-cards":  {mode:"tmdb",  tmdbType:"tv",  tmdbPage:1,         pt:null,loading:false,done:false},
+  "reels-cards":    {mode:"yt", query:"viral shorts funny 2025",       pt:null,loading:false,done:false,short:true,isReel:true},
+  "tiktok-cards":   {mode:"yt", query:"tiktok dance challenge 2025",   pt:null,loading:false,done:false},
+  "songs-cards":    {mode:"songs", query:"trending songs 2025",        pt:null,loading:false,done:false},
+};
+
+/* SENTINEL OBSERVER */
+const sentinelObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting && e.target.dataset.feed) loadMore(e.target.dataset.feed);});
+},{rootMargin:"0px 0px 400px 0px"});
+
+function makeSentinel(id){
+  const d=document.createElement("div");
+  d.style.cssText="width:1px;flex-shrink:0;height:2px;align-self:stretch;";
+  d.dataset.feed=id; sentinelObs.observe(d); return d;
+}
+
+/* FETCH YT */
+async function fetchYT(query,pt=null,max=4,short=false){
+  let url=`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=${max}&key=${getYTKey()}`;
+  if(short) url+="&videoDuration=short";
+  if(pt) url+=`&pageToken=${pt}`;
+  const d=await(await fetch(url)).json();
+  if(d.error){
+    const reason=d.error.errors?.[0]?.reason||"";
+    if(reason==="quotaExceeded" && rotateYTKey()){
+      // Retry with next key
+      return fetchYT(query,pt,max,short);
+    }
+    const msg=reason==="quotaExceeded"
+      ? "All YouTube API keys exhausted for today. Add more keys or come back tomorrow! ⏰"
+      : `YouTube error: ${d.error.message}`;
+    return{videos:[],next:null,error:msg};
+  }
+  return{
+    videos:(d.items||[]).map(v=>({id:v.id.videoId,title:v.snippet.title,thumb:`https://i.ytimg.com/vi/${v.id.videoId}/mqdefault.jpg`})),
+    next:d.nextPageToken||null
+  };
+}
+
+function showFeedError(id, msg){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.innerHTML=`<div class="spin-wrap" style="flex-direction:column;min-width:280px;text-align:center;gap:10px">
+    <span style="font-size:1.5rem">⚠️</span>
+    <span style="color:var(--muted);font-size:.8rem;max-width:240px">${msg}</span>
+  </div>`;
+}
+
+/* FETCH TMDB */
+async function fetchTMDB(type,page){
+  const ep=type==="tv"
+    ?`https://api.themoviedb.org/3/tv/popular?api_key=${TMDB_KEY}&language=en-US&page=${page}`
+    :`https://api.themoviedb.org/3/movie/now_playing?api_key=${TMDB_KEY}&language=en-US&page=${page}`;
+  const d=await(await fetch(ep)).json();
+  return d.results||[];
+}
+
+/* FETCH ARCHIVE */
+async function fetchArchive(page){
+  const url=`https://archive.org/advancedsearch.php?q=mediatype:movies+AND+subject:feature+film&fl=identifier,title&sort=downloads+desc&rows=8&page=${page}&output=json`;
+  const d=await(await fetch(url)).json();
+  return(d.response?.docs||[]).map(i=>({id:i.identifier,title:i.title||i.identifier}));
+}
+
+/* BUILD CARDS */
+function makeVCard(v,isReel){
+  const el=document.createElement("div");
+  el.className=isReel?"r-card":"v-card";
+  // Use thumbnail instead of iframe — load video only on click
+  const thumbUrl=isReel
+    ? `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`
+    : `https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`;
+  el.innerHTML=`
+    <div class="thumb-wrap" data-vid="${v.id}">
+      <img src="${thumbUrl}" alt="${v.title}" loading="lazy">
+      <div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    </div>
+    <div class="vc-title">${v.title}</div>`;
+  el.querySelector(".thumb-wrap").addEventListener("click", function(){
+    this.innerHTML=`<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&fs=1&playsinline=0" allowfullscreen webkitallowfullscreen mozallowfullscreen allow="autoplay; fullscreen; picture-in-picture; encrypted-media" frameborder="0" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>`;
+  });
+  return el;
+}
+
+function makeTMDBCard(item,type){
+  const title=item.title||item.name||"";
+  const year=(item.release_date||item.first_air_date||"").slice(0,4);
+  const rating=item.vote_average?item.vote_average.toFixed(1):"N/A";
+  const poster=item.poster_path?`<img class="n-poster" src="https://image.tmdb.org/t/p/w342${item.poster_path}" alt="" loading="lazy">`:`<div class="n-poster-ph">🎬</div>`;
+  const nq=encodeURIComponent(title);
+  const tq=encodeURIComponent(title+(type==="tv"?" season 1 trailer":" official trailer"));
+  const el=document.createElement("div");
+  el.className="n-card";
+  el.innerHTML=`${poster}<div class="n-info"><div class="n-title">${title}</div><div class="n-meta"><span>${year}</span><span class="n-rating">⭐${rating}</span></div><div class="n-actions"><a href="https://www.netflix.com/search?q=${nq}" target="_blank" class="sb nf">Netflix</a><a href="https://tubitv.com/search/${nq}" target="_blank" class="sb tb">Tubi</a><a href="https://www.youtube.com/results?search_query=${tq}" target="_blank" class="sb tr">▶</a></div></div>`;
+  return el;
+}
+
+function makeArchiveCard(item){
+  const el=document.createElement("div");
+  el.className="v-card";
+  el.innerHTML=`
+    <div class="thumb-wrap" data-id="${item.id}">
+      <img src="https://archive.org/services/img/${item.id}" alt="${item.title}" loading="lazy" onerror="this.src='https://archive.org/images/notfound.png'">
+      <div class="play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    </div>
+    <div class="vc-title">${item.title}</div>`;
+  el.querySelector(".thumb-wrap").addEventListener("click", function(){
+    this.innerHTML=`<iframe src="https://archive.org/embed/${item.id}?autoplay=1" allowfullscreen webkitallowfullscreen mozallowfullscreen allow="autoplay; fullscreen; picture-in-picture; encrypted-media" frameborder="0" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block"></iframe>`;
+  });
+  return el;
+}
+
+let songVideoOpen=null;
+let songCount=0;
+function makeSongRow(v,num){
+  const row=document.createElement("div");
+  row.innerHTML=`<div class="song-item"><span class="song-num">${num}</span><img class="song-thumb" src="${v.thumb}" alt="" loading="lazy" onerror="this.outerHTML='<div class=\\'song-thumb-ph\\'>🎵</div>'"><div class="song-info"><div class="song-title">${v.title}</div></div><button class="song-play" aria-label="Play"><svg width="11" height="11" viewBox="0 0 24 24" fill="#fff"><polygon points="5 3 19 12 5 21 5 3"/></svg></button></div><div class="song-video-wrap" id="svw-${v.id}"></div>`;
+  row.querySelector(".song-play").addEventListener("click",()=>{
+    const wrap=document.getElementById(`svw-${v.id}`);
+    const isOpen=wrap.classList.contains("open");
+    if(songVideoOpen&&songVideoOpen!==wrap){songVideoOpen.classList.remove("open");songVideoOpen.innerHTML="";}
+    if(!isOpen){wrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&fs=1&playsinline=0" allowfullscreen webkitallowfullscreen mozallowfullscreen allow="autoplay; fullscreen; picture-in-picture; encrypted-media" frameborder="0" style="width:100%;aspect-ratio:16/9;border:0;display:block"></iframe>`;wrap.classList.add("open");songVideoOpen=wrap;}
+    else{wrap.classList.remove("open");wrap.innerHTML="";songVideoOpen=null;}
+  });
+  return row;
+}
+
+/* APPEND TO FEED */
+function appendToFeed(id,items){
+  const el=document.getElementById(id);
+  const feed=feeds[id];
+  el.querySelector(".sentinel")?.remove();
+  el.querySelector(".spin-wrap")?.remove();
+  el.querySelector(".inline-spin")?.remove();
+
+  if(feed.mode==="songs"){
+    items.forEach(v=>{songCount++;el.appendChild(makeSongRow(v,songCount));});
+  } else if(feed.mode==="tmdb"){
+    items.forEach(item=>el.appendChild(makeTMDBCard(item,feed.tmdbType)));
+  } else if(feed.mode==="archive"){
+    items.forEach(item=>el.appendChild(makeArchiveCard(item)));
+  } else {
+    items.forEach(v=>el.appendChild(makeVCard(v,feed.isReel)));
+  }
+  if(!feed.done) el.appendChild(makeSentinel(id));
+  else{const e=document.createElement("div");e.className="spin-wrap";e.innerHTML="<span>You've seen it all 🎉</span>";e.style.flexShrink="0";el.appendChild(e);}
+}
+
+/* LOAD MORE */
+async function loadMore(id){
+  const feed=feeds[id];
+  if(!feed||feed.loading||feed.done) return;
+  feed.loading=true;
+  const el=document.getElementById(id);
+  if(!el){feed.loading=false;return;}
+  let spin=el.querySelector(".inline-spin");
+  if(!spin){spin=document.createElement("div");spin.className="spin-wrap inline-spin";spin.style.flexShrink="0";spin.innerHTML='<div class="spinner"></div>';el.appendChild(spin);}
+  try{
+    if(feed.mode==="yt"||feed.mode==="songs"){
+      const isFirst=!feed.pt; const r=await fetchYT(feed.query,feed.pt,isFirst?4:8,feed.short||false);
+      if(r.error){
+        spin.remove();
+        showFeedError(id, r.error);
+        feed.done=true;
+      } else {
+        feed.pt=r.next; if(!r.next) feed.done=true;
+        spin.remove(); appendToFeed(id,r.videos);
+      }
+    } else if(feed.mode==="tmdb"){
+      const items=await fetchTMDB(feed.tmdbType,feed.tmdbPage);
+      feed.tmdbPage++; if(!items.length) feed.done=true;
+      spin.remove(); appendToFeed(id,items);
+    } else if(feed.mode==="archive"){
+      const items=await fetchArchive(feed.archivePage);
+      feed.archivePage++; if(!items.length) feed.done=true;
+      spin.remove(); appendToFeed(id,items);
+    }
+  }catch(e){
+    console.error(e);
+    spin?.remove();
+    showFeedError(id, "Connection error. Check your internet.");
+    feed.done=true;
+  }
+  feed.loading=false;
+}
+
+/* MOVIE TAB SWITCH */
+function switchMovieTab(tab,e){
+  document.querySelectorAll(".mtab").forEach(b=>b.classList.remove("active"));
+  e.target.classList.add("active");
+  document.getElementById("movies-yt-panel").style.display=tab==="yt"?"":"none";
+  document.getElementById("movies-archive-panel").style.display=tab==="archive"?"":"none";
+  if(tab==="archive"&&!feeds["archive-cards"].initialized){feeds["archive-cards"].initialized=true;loadMore("archive-cards");}
+}
+
+/* SHARE */
+function shareSite(){
+  const url=location.href;
+  if(navigator.share) navigator.share({title:"Dalton's Hub",text:"Check this out!",url}).catch(()=>{});
+  else navigator.clipboard?.writeText(url).then(()=>alert("Link copied!")).catch(()=>alert("Copy: "+url));
+}
+
+/* CHAT */
+let myName="Guest";
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const ts=()=>new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+
+function appendMsg(m){
+  const box=document.getElementById("chat-messages");
+  const atBot=box.scrollHeight-box.scrollTop-box.clientHeight<100;
+  let el;
+  if(m.system){el=document.createElement("div");el.className="chat-system";el.textContent=m.text;}
+  else{
+    const mine=m.name===myName;
+    el=document.createElement("div");el.className=`msg ${mine?"mine":"theirs"}`;
+    el.innerHTML=`<div class="msg-meta">${mine?"You":esc(m.name)} · ${m.time}</div><div class="msg-bubble">${esc(m.text)}</div>`;
+  }
+  const ph=box.querySelector(".chat-system");
+  if(ph&&ph.textContent.includes("No messages")) ph.remove();
+  box.appendChild(el);
+  if(atBot) box.scrollTop=box.scrollHeight;
+}
+
+function sendMsg(){
+  const inp=document.getElementById("chat-input");
+  const text=inp.value.trim(); if(!text) return;
+  myName=document.getElementById("chat-username").value.trim()||"Guest";
+  inp.value=""; inp.style.height="auto";
+  firebase.database().ref("daltons_chat").push().set({name:myName,text,time:ts(),ts:Date.now()});
+}
+
+function initChat(){
+  const box = document.getElementById("chat-messages");
+  box.innerHTML='<div class="chat-system">Connecting to chat… 🔄</div>';
+  document.getElementById("chat-send").addEventListener("click",sendMsg);
+  document.getElementById("chat-input").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg();}});
+  document.getElementById("chat-username").addEventListener("input",e=>{myName=e.target.value.trim()||"Guest";});
+
+  try {
+    const db=firebase.database();
+    const ref=db.ref("daltons_chat");
+
+    // Load last 60 messages then listen for new ones
+    ref.orderByChild("ts").limitToLast(60).once("value", snap=>{
+      box.innerHTML="";
+      const msgs=[];
+      snap.forEach(c=>msgs.push(c.val()));
+      if(!msgs.length){
+        box.innerHTML='<div class="chat-system">No messages yet — say hello! 👋</div>';
+      } else {
+        msgs.forEach(appendMsg);
+      }
+      box.scrollTop=box.scrollHeight;
+
+      // Listen only for messages newer than now
+      ref.orderByChild("ts").startAt(Date.now()+1).on("child_added", snap=>{
+        appendMsg(snap.val());
+      });
+    }, err=>{
+      box.innerHTML=`<div class="chat-system">⚠️ Chat unavailable: ${err.message}</div>`;
+    });
+
+    // Presence (online count)
+    const presRef=db.ref("presence/"+Math.random().toString(36).slice(2));
+    db.ref(".info/connected").on("value",s=>{
+      if(s.val()){presRef.onDisconnect().remove();presRef.set(true);}
+    });
+    db.ref("presence").on("value",s=>{
+      const n=s.numChildren()+" online";
+      document.getElementById("online-count").textContent=n;
+      document.getElementById("online-count2").textContent=n;
+    });
+  } catch(e) {
+    box.innerHTML='<div class="chat-system">⚠️ Could not connect to chat. Check your internet connection.</div>';
+    console.error("Chat error:",e);
+  }
+}
+
+/* PHOTO MODAL */
+function openPhoto(){
+  document.getElementById("photo-modal").classList.add("open");
+}
+function closePhotoBtn(){
+  document.getElementById("photo-modal").classList.remove("open");
+  document.body.style.overflow="";
+  document.documentElement.style.overflow="";
+}
+function closePhoto(e){
+  if(e.target===document.getElementById("photo-modal")) closePhotoBtn();
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closePhotoBtn(); });
+
+/* SEARCH */
+const searchSections=[
+  {icon:"⚽",label:"Football Highlights",id:"football"},
+  {icon:"🎬",label:"Free Movies",id:"movies"},
+  {icon:"📺",label:"TV Shows & Series",id:"tvshows"},
+  {icon:"🎶",label:"Trending Songs",id:"songs"},
+  {icon:"📱",label:"Reels & Shorts",id:"reels"},
+  {icon:"💃",label:"TikTok Challenges",id:"tiktok"},
+  {icon:"💬",label:"Live Chatroom",id:"chat"},
+  {icon:"👨‍💻",label:"Developer",id:"developer"},
+];
+function initSearch(){
+  const inp=document.getElementById("site-search");
+  const res=document.getElementById("search-results");
+  inp.addEventListener("input",()=>{
+    const q=inp.value.trim().toLowerCase();
+    if(!q){res.style.display="none";return;}
+    const m=searchSections.filter(s=>s.label.toLowerCase().includes(q));
+    if(!m.length){res.style.display="none";return;}
+    res.innerHTML=m.map(s=>`<div class="sr-item" onclick="goSection('${s.id}')"><span>${s.icon}</span><span>${s.label}</span></div>`).join("");
+    res.style.display="block";
+  });
+  document.addEventListener("click",e=>{if(!e.target.closest(".search-wrap")) res.style.display="none";});
+  inp.addEventListener("keydown",e=>{if(e.key==="Escape"){res.style.display="none";inp.blur();}});
+}
+function goSection(id){
+  document.getElementById("site-search").value="";
+  document.getElementById("search-results").style.display="none";
+  const el=document.getElementById(id)||document.getElementById("chatroom-bg");
+  if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* FADE IN disabled - sections always visible */
+
+/* ACTIVE NAV + STRIP HIGHLIGHT */
+const navLinks=document.querySelectorAll("nav a");
+const pillLinks=document.querySelectorAll(".platform-strip .p-pill");
+
+function setActive(id){
+  navLinks.forEach(a=>a.classList.toggle("active",a.getAttribute("href")==="#"+id));
+  pillLinks.forEach(a=>a.classList.toggle("p-pill-active",a.getAttribute("href")==="#"+id));
+}
+
+const navObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id==="chatroom-bg"?"chat":e.target.id;
+      setActive(id);
+      // scroll active pill into view in the strip
+      const activePill=document.querySelector(`.platform-strip a[href="#${id}"]`);
+      if(activePill) activePill.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
+    }
+  });
+},{rootMargin:"-35% 0px -55% 0px"});
+document.querySelectorAll("section[id],div[id='chatroom-bg']").forEach(s=>navObs.observe(s));
+
+document.addEventListener("DOMContentLoaded",()=>{
+  Object.keys(feeds).forEach(id=>{if(id!=="archive-cards") loadMore(id);});
+  initChat();
+  initSearch();
+});
+</script>
+</body>
+</html>
